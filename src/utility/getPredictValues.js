@@ -1,4 +1,4 @@
-const base_url = 'localhost:5000'
+const base_url = 'http://localhost:5000'
 // async function getResult (){
 //     return {
 //         "message": "Success",
@@ -14,6 +14,9 @@ const base_url = 'localhost:5000'
 // }
 
 export const getPredictValues = async(data, params) => {
+    // console.log(data);
+    // const result = await getResult();
+    // return [result.result.probs, ""];
     try{
         const endpoint = `${base_url}/predict/${params}`;
         const bodyData = JSON.stringify({ "data": data });
@@ -28,7 +31,7 @@ export const getPredictValues = async(data, params) => {
     
         if (response.ok) {
             const jsonResponse = await response.json();
-            if (jsonResponse.status === "Success"){
+            if (jsonResponse.message === "Success"){
                 if (params === "nonplot"){
                     return jsonResponse.result.probs;//return probs only
                 }
@@ -42,7 +45,7 @@ export const getPredictValues = async(data, params) => {
             }
         }
         else{
-            alert(response.status + " " + response.statusText);
+            // alert(response.status + " " + response.statusText);
             return "fail";
         }
     }

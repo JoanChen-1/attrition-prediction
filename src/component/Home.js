@@ -49,7 +49,7 @@ export default function Home() {
       setDetail(d);
       setSelectedID(d.user_id);
     }
-  },[detail]);
+  },[detail, selectedID]);
 
   const handleClose = (event, reason) => { // close alert snackbar
     if (reason === 'clickaway') {
@@ -134,7 +134,12 @@ export default function Home() {
           </Typography>)
         }
         <Box sx={{ mt: 5, width: window.innerWidth, height: "auto"}}>
-          {(imgSrc) && (<img src={`data:image/png;base64,${imgSrc}`} width={window.innerWidth - 100}/>)}
+          {(imgSrc) && (
+          <img src={`data:image/png;base64,${imgSrc}`} 
+            width={window.innerWidth - 100}
+            alt="feature-import-img"
+          />
+          )}
         </Box>
       </main>
       <Footer productName={productName}/>

@@ -9,7 +9,7 @@ export default function Header(props) {
     const isMdUp = useIsWidthUp("md");
 
     return (
-        <Box
+      <Box
         sx={{
           position: 'relative',
           backgroundColor: 'grey.800',
@@ -25,20 +25,24 @@ export default function Header(props) {
         }}
       >
         <Container maxWidth="md">
-          <Typography
-            component="h1"
-            variant={ isMdUp ? "h2": "h4"}
-            align="center"
-            color="#2d102c"
-            gutterBottom
-            sx={{fontFamily: 'Karla, sans-serif'}}
-          >
-            {productName}
-          </Typography>
-          <Typography variant="h5" align="center" color="#2d102c" paragraph
-            sx={{fontFamily: 'Karla, sans-serif'}}>
-            {productDescription}<br/><br/><br/><br/><br/><br/><br/>
-          </Typography>
+            <Typography
+              component="h1"
+              variant={ isMdUp ? "h2": "h4"}
+              align="center"
+              color="#2d102c"
+              gutterBottom
+              sx={{fontFamily: 'Karla, sans-serif', fontWeight: 'bold'}}
+              >
+              {productName}
+            </Typography>
+          <Box sx={{backgroundColor: 'rgba(255, 255, 255, 1)', mt: -7, py: 2}}>
+          </Box>
+          {/* <Box sx={{backgroundColor: 'rgba(255,255,255,0.8)'}}> */}
+            <Typography variant="h5" align="center" color="#2d102c" paragraph
+              sx={{fontFamily: 'Karla, sans-serif'}}>
+              {productDescription}<br/><br/><br/><br/><br/><br/>
+            </Typography>
+          {/* </Box> */}
         </Container>
       </Box>
     );

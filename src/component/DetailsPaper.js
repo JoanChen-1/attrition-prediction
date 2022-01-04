@@ -113,18 +113,18 @@ export default function DetailsPaper(props) {
   useEffect(()=>{
     let stateList = {};
     if(data !== null){
-      selectOptions.map((o, idx)=>{
+      selectOptions.forEach((o, idx)=>{
         stateList[o.label] = data[o.label];
       })
-      textFieldOptions.map((t, idx)=>{
+      textFieldOptions.forEach((t, idx)=>{
         stateList[t] = data[t];
       })
     } 
     else{
-      selectOptions.map((o)=>{
+      selectOptions.forEach((o)=>{
         stateList[o.label] = ""
       })
-      textFieldOptions.map((t)=>{
+      textFieldOptions.forEach((t)=>{
         stateList[t] = 0
       })
     }
@@ -221,9 +221,7 @@ export default function DetailsPaper(props) {
           }}
         >
           <Avatar sx={{ mr: 2}}>
-            <img src={data.img} 
-                alt="avatar-img"
-                /> 
+            <img src={data.img} alt="details-paper-avatar"/> 
           </Avatar>
           <Grid container direction="row" justifyContent="flex-start">  
             <Typography sx={{fontFamily: 'Karla, sans-serif'}}>
@@ -275,8 +273,8 @@ export default function DetailsPaper(props) {
               {(newPredictVal !== null) && (
                 <ColorfulChip
                   label={"attrition risk: " + newPredictVal + "%"}
-                  color={newPredictVal >= 70 ? colors.red: 
-                    (newPredictVal >= 40 ? colors.yellow:colors.green)}
+                  color={newPredictVal >= 80 ? colors.red: 
+                    (newPredictVal >= 45 ? colors.yellow:colors.green)}
                 />)}
             </Grid>
             <Stack spacing={2} direction="row" sx={{ mx: 20 }}

@@ -1,13 +1,14 @@
 import * as React from 'react';
-import Grid from '@mui/material/Grid';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
+import ColorfulChip from "./shared/ColorfulChip";
+import EnhancedTableHead from "./shared/EnhancedTableHead";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
-import EnhancedTableHead from "./shared/EnhancedTableHead";
-import ColorfulChip from "./shared/ColorfulChip";
+import Grid from '@mui/material/Grid';
 
 
 
@@ -41,6 +42,29 @@ export default function ListTable(props) {
         overflowX: "auto",
         width: "100%"}}
       >
+        <Box sx={{
+          display: 'grid',
+          gap: 1,
+          gridTemplateColumns: 'repeat(2, 1fr)',
+          mb: 2
+        }}>
+          <ColorfulChip
+            label="high risk: >= 80%"
+            color={colors.red}
+          />
+          <ColorfulChip
+            label="medium risk: 45% - 80%"
+            color={colors.yellow}
+          />
+          <ColorfulChip
+            label="low risk: < 45%"
+            color={colors.green}
+          />
+          <ColorfulChip
+            label="haven't predict yet!"
+            color={colors.gray}
+          />
+        </Box>
         <Table aria-labelledby="tableTitle">
           <EnhancedTableHead rowCount={data.length} rows={rows} />
           <TableBody>
@@ -59,7 +83,7 @@ export default function ListTable(props) {
                     justifyContent="center"
                   >
                     <Avatar sx={{ mr: 2}}>
-                      <img src={d.img}/> 
+                      <img src={d.img} alt="list-table-avatar"/> 
                     </Avatar>
                     {d.user_id}
                   </Grid>
@@ -76,8 +100,8 @@ export default function ListTable(props) {
                     {(predictValues.length !== 0) && (
                     <ColorfulChip
                       label={predictValues[idx].Attrition+"%"}
-                      color={predictValues[idx].Attrition >= 70 ? colors.red: 
-                        (predictValues[idx].Attrition >= 40?colors.yellow
+                      color={predictValues[idx].Attrition >= 80 ? colors.red: 
+                        (predictValues[idx].Attrition >= 45?colors.yellow
                           :colors.green)}
                     />)}
                     {(predictValues.length === 0) && (<ColorfulChip
@@ -88,10 +112,9 @@ export default function ListTable(props) {
                   <TableCell component="th" scope="row" align='center'>
                     <Button
                       variant={(d.user_id === selected)? "contained" : "outlined"}
-                      sx={{ boarderRadius: 20 }}
                       color="secondary"
                       onClick={ () => {handleShowDetails(d, idx)}}
-                      sx={{fontFamily: 'Karla, sans-serif'}}
+                      sx={{boarderRadius: 20, fontFamily: 'Karla, sans-serif'}}
                     >
                       show
                     </Button>
