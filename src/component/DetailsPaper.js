@@ -106,13 +106,11 @@ export default function DetailsPaper(props) {
     setOpenAlert, 
     newPredictVal, 
     setNewPredictVal, 
-    imgSrc, 
     setImgSrc} = props;
   const [values, setValues] = useState(null);
 
 
   useEffect(()=>{
-    console.log('init');
     let stateList = {};
     if(data !== null){
       selectOptions.map((o, idx)=>{
@@ -150,11 +148,17 @@ export default function DetailsPaper(props) {
   }
 
   const handleSubmit = () =>{
-    const newObject = {...data};
-    for(const [key, value] in Object.entries(values)){
-      newObject[key] = value;
+    let newObject = Object.assign({}, data);
+    for(const key in values){
+      if (key === "OverTime" || key === "EnvironmentStatisfaction" || key === "BusinessTravel"){
+        newObject[key] = values[key]; // don't need to convert
+      }
+      else{
+        newObject[key] = parseInt(values[key]); // convert string to int
+      }
     }
     (async() => {
+      delete newObject.img;
       const result = await getPredictValues([newObject], "plot");
       if (result === "fail"){
         setOpenAlert(true);
@@ -217,7 +221,7 @@ export default function DetailsPaper(props) {
           }}
         >
           <Avatar sx={{ mr: 2}}>
-            <img src={'https://i.pravatar.cc/40?img=16'} 
+            <img src={data.img} 
                 alt="avatar-img"
                 /> 
           </Avatar>
@@ -263,10 +267,11 @@ export default function DetailsPaper(props) {
                   onChange={handleChange}
                   color="secondary"
                   sx={{ minWidth: 160, fontFamily: 'Karla, sans-serif'}}
+                  inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
                   />
               </Box>    
             ))}
-            <Grid container direction="row" justifyContent="center"> 
+            <Grid container direction="row" justifyContent="center" sx={{my: 2}}> 
               {(newPredictVal !== null) && (
                 <ColorfulChip
                   label={"attrition risk: " + newPredictVal + "%"}
@@ -274,7 +279,6 @@ export default function DetailsPaper(props) {
                     (newPredictVal >= 40 ? colors.yellow:colors.green)}
                 />)}
             </Grid>
-            {(imgSrc) && (<img src={`data:image/png;base64,${imgSrc}`}/>)}
             <Stack spacing={2} direction="row" sx={{ mx: 20 }}
               divider={<Divider orientation="vertical" flexItem />}
               justifyContent="center"
@@ -285,7 +289,7 @@ export default function DetailsPaper(props) {
               </Button> 
               <Button color="secondary" onClick={handleSubmit}
                sx={{fontFamily: 'Karla, sans-serif'}}>
-                Predict Again
+                 Predict Again
               </Button> 
             </Stack>
           </Grid>

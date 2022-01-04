@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useState, useEffect, useCallback } from 'react';
 import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import Container from '@mui/material/Container';
@@ -36,6 +37,7 @@ export default function Home() {
   const [openAlert, setOpenAlert] = useState(false);
   const [newPredictVal, setNewPredictVal] = useState(null);
   const [imgSrc, setImgSrc] = useState(null);
+
   const handleShowDetails = useCallback((d, idx) =>{
     setNewPredictVal(null);
     setImgSrc(null);
@@ -58,7 +60,10 @@ export default function Home() {
 
   const handlePredictAll = useCallback(() =>{
     (async() => {
-      const result = await getPredictValues(data, "nonplot");
+      let newData = data.map(d=>{return Object.assign({}, d);});
+      newData.forEach((i)=>{ delete i.img });
+      console.log(newData);
+      const result = await getPredictValues(newData, "nonplot");
       if (result === "fail"){
         setOpenAlert(true);
       }
@@ -106,7 +111,7 @@ export default function Home() {
                 colors={colors}
               />
               <Button color="secondary" onClick={handlePredictAll}
-              sx={{fontFamily: 'Karla, sans-serif'}}>
+                sx={{fontFamily: 'Karla, sans-serif'}}>
                 Predict All Above
               </Button>  
               <AlertSnackbars open={openAlert} handleClose={handleClose}/> 
@@ -123,6 +128,14 @@ export default function Home() {
             </Grid>            
           </Grid>
         </Container>
+        {(imgSrc) &&(
+          <Typography variant="h5" sx={{fontFamily: 'Karla, sans-serif'}} color="secondary">
+            Some <b>important features</b> for predicting the attrition risk for the employee: {selectedID}
+          </Typography>)
+        }
+        <Box sx={{ mt: 5, width: window.innerWidth, height: "auto"}}>
+          {(imgSrc) && (<img src={`data:image/png;base64,${imgSrc}`} width={window.innerWidth - 100}/>)}
+        </Box>
       </main>
       <Footer productName={productName}/>
     </ThemeProvider>

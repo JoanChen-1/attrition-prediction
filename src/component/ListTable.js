@@ -59,7 +59,7 @@ export default function ListTable(props) {
                     justifyContent="center"
                   >
                     <Avatar sx={{ mr: 2}}>
-                      <img src={'https://i.pravatar.cc/40?img=16'}/> 
+                      <img src={d.img}/> 
                     </Avatar>
                     {d.user_id}
                   </Grid>
