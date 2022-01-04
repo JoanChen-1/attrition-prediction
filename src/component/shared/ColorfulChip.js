@@ -12,6 +12,7 @@ function ColorfulChip(props) {
       }}
       label={label}
       className={className ? className : null}
+      sx={{fontFamily: 'Karla, sans-serif'}}
     />
   );
 }

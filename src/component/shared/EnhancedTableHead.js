@@ -39,7 +39,7 @@ function EnhancedTableHead(props) {
           <TableCell
             key={index}
             align={row.numeric ? "right" : "center"}
-            padding="default"
+            padding="none"
             sortDirection={orderBy === row.name ? order : false}
             className={null}
           >
@@ -54,14 +54,17 @@ function EnhancedTableHead(props) {
                   direction={order}
                   onClick={createSortHandler(row.id)}
                 >
-                  <Typography variant="body2">{row.label}</Typography>
+                  <Typography variant="body2" sx={{fontFamily: 'Karla, sans-serif'}}>
+                    {row.label}
+                  </Typography>
                 </TableSortLabel>
               </Tooltip>
             ) : (
               <TableSortLabel
                 className={classNames(classes.tableSortLabel, classes.noIcon)}
               >
-                <Typography variant="body2" className={classes.label}>
+                <Typography variant="body2" className={classes.label}
+                sx={{fontFamily: 'Karla, sans-serif'}}>
                   {row.label}
                 </Typography>
               </TableSortLabel>

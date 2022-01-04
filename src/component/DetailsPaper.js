@@ -1,25 +1,171 @@
 import * as React from 'react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react'; 
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import ColorfulChip from "./shared/ColorfulChip";
 import Divider from '@mui/material/Divider';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
-// import Radio from '@mui/material/Radio';
-// import RadioGroup from '@mui/material/RadioGroup';
-import FormControl from '@mui/material/FormControl';
-// import FormControlLabel from '@mui/material/FormControlLabel';
-// import FormLabel from '@mui/material/FormLabel';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
-import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
+import { getPredictValues } from '../utility/getPredictValues';
 
+const selectOptions = [
+  {
+    label: "OverTime",
+    options: [
+      "Yes",
+      "No"
+    ]
+  },
+  {
+    label: "EnvironmentSatisfaction",
+    options:[
+      1,
+      2,
+      3,
+      4
+    ]
+  },
+  {
+    label: "BusinessTravel",
+    options: [
+      "Non-Travel",
+      "Travel_Rarely",
+      "Travel_Frequently"
+    ]
+  },
+  {
+    label: "WorkLifeBalance",
+    options: [
+      1,
+      2,
+      3,
+      4
+    ]
+  },
+  {
+    label: "JobRole",
+    options: [
+      "Sales Executive",
+      "Research Scientist",
+      "Laboratory Technician",
+      "Manufacturing Director",
+      "Healthcare Representative",
+      "Manager",
+      "Sales Representative",
+      "Research Director",
+      "Human Resources"
+    ]
+  },
+  {
+    label: "RelationshipSatisfaction",
+    options: [
+      1,
+      2,
+      3,
+      4
+    ]
+  },
+  {
+    label: "JobLevel",
+    options: [
+      1,
+      2,
+      3,
+      4,
+      5
+    ]
+  }
+]
+
+const textFieldOptions = [
+  "YearsWithCurrManager",
+  "DailyRate",
+  "MonthlyIncome",
+  "JobInvolvement",
+  "Age",
+  "YearsSinceLastPromotion",
+  "DistanceFromHome",
+  "StockOptionLevel",
+  "PercentSalaryHike",
+  "HourlyRate",
+  "MonthlyRate",
+  "TrainingTimesLastYear",
+  "YearsInCurrentRole",
+  "TotalWorkingYears",
+  "YearsAtCompany"
+]
 export default function DetailsPaper(props) {
-  const { data } = props;
+  const { 
+    data, 
+    colors, 
+    setOpenAlert, 
+    newPredictVal, 
+    setNewPredictVal, 
+    imgSrc, 
+    setImgSrc} = props;
+  const [values, setValues] = useState(null);
+
+
+  useEffect(()=>{
+    console.log('init');
+    let stateList = {};
+    if(data !== null){
+      selectOptions.map((o, idx)=>{
+        stateList[o.label] = data[o.label];
+      })
+      textFieldOptions.map((t, idx)=>{
+        stateList[t] = data[t];
+      })
+    } 
+    else{
+      selectOptions.map((o)=>{
+        stateList[o.label] = ""
+      })
+      textFieldOptions.map((t)=>{
+        stateList[t] = 0
+      })
+    }
+    setValues(stateList);
+  }, [data])
+
+  const handleChange = (e) =>{
+    const name = e.target.name;
+    const value = e.target.value;
+    setValues(prevState => (
+      {                   
+          ...prevState,
+          [name]: value
+      }
+    ))
+  }
+
+  const handleReset = () =>{
+    setNewPredictVal(null);
+    setImgSrc(null);
+  }
+
+  const handleSubmit = () =>{
+    const newObject = {...data};
+    for(const [key, value] in Object.entries(values)){
+      newObject[key] = value;
+    }
+    (async() => {
+      const result = await getPredictValues([newObject], "plot");
+      if (result === "fail"){
+        setOpenAlert(true);
+      }
+      else{
+        setNewPredictVal(result[0][0].Attrition);
+        setImgSrc(result[1]);
+      }
+    })()
+  }
+
   if (data === null){
     return(
       <Box
@@ -39,13 +185,13 @@ export default function DetailsPaper(props) {
           }}
           elevation={2}
         >
-          <Typography>
+          <Typography sx={{fontFamily: 'Karla, sans-serif'}}>
             click button
           </Typography>
-          <Typography color="secondary">
+          <Typography color="secondary" sx={{fontFamily: 'Karla, sans-serif'}}>
             "SHOW"
           </Typography>
-          <Typography>
+          <Typography sx={{fontFamily: 'Karla, sans-serif'}}>
             to get details!
           </Typography>
         </Paper>    
@@ -62,83 +208,88 @@ export default function DetailsPaper(props) {
         },
       }}
     >
-      <Paper 
-        sx={{ 
-          borderRadius: 5, 
-          borderStyle: 'solid'
-        }}
-        elevation={2}
-      >
+      <Paper sx={{ borderRadius: 5, borderStyle: 'solid', borderColor: '#9c27b0' }} elevation={2}>
         <Box
-          sx={{
-          mt: 4,
-          mx: 4,
+          sx={{ mt: 4, mx: 4,
           display: 'flex',
           flexDirection: 'row',
           alignItems: 'center',
           }}
         >
           <Avatar sx={{ mr: 2}}>
-            <img src={process.env.PUBLIC_URL + '/favicon-32x32.png'} 
+            <img src={'https://i.pravatar.cc/40?img=16'} 
                 alt="avatar-img"
-            /> 
+                /> 
           </Avatar>
-          <Typography>
-            user_id  suggestion  score: 79%
-          </Typography>
+          <Grid container direction="row" justifyContent="flex-start">  
+            <Typography sx={{fontFamily: 'Karla, sans-serif'}}>
+              {data.user_id}
+            </Typography>
+          </Grid>
         </Box>
-        <Grid container direction="row" sx={{ mx: 2}}>
-          <Box sx={{ maxWidth: 60, my: 2 }}>
-            <TextField
-              id="age"
-              label="Age"
-              defaultValue={data.Age}
-            />
-          </Box>
-          <Box sx={{ minWidth: 120, my: 2 }}>
-            <FormControl>
-              <InputLabel id="gender">Gender</InputLabel>
-              <Select
-                labelId="gender"
-                id="gender"
-                value={0}
-                label="Gender"
+        <Typography color="secondary" sx={{fontFamily: 'Karla, sans-serif'}}>
+          DETAILS
+        </Typography>
+        <Box component="form" noValidate onSubmit={handleSubmit}>
+          <Grid container direction="row" sx={{ mx: 2}}>
+            {selectOptions.map((s, sidx)=>(
+              <Box sx={{ m: 1}} key={sidx}>
+                <TextField
+                  select
+                  id={s.label}
+                  label={s.label}
+                  name={s.label}
+                  value={values[s.label]}
+                  onChange={handleChange}
+                  color="secondary"
+                  sx={{ minWidth: 220, fontFamily: 'Karla, sans-serif'}}
+                >
+                {s.options.map((o, oidx)=>(
+                  <MenuItem value={o} key={oidx} 
+                   sx={{ fontFamily: 'Karla, sans-serif'}}>
+                     {o}
+                  </MenuItem>
+                ))}
+                </TextField>
+              </Box>    
+            ))}
+            {textFieldOptions.map((t, tidx)=>(
+              <Box sx={{ m: 1}} key={tidx}>
+                <TextField
+                  id={t}
+                  label={t}
+                  name={t}
+                  value={values[t]}
+                  onChange={handleChange}
+                  color="secondary"
+                  sx={{ minWidth: 160, fontFamily: 'Karla, sans-serif'}}
+                  />
+              </Box>    
+            ))}
+            <Grid container direction="row" justifyContent="center"> 
+              {(newPredictVal !== null) && (
+                <ColorfulChip
+                  label={"attrition risk: " + newPredictVal + "%"}
+                  color={newPredictVal >= 70 ? colors.red: 
+                    (newPredictVal >= 40 ? colors.yellow:colors.green)}
+                />)}
+            </Grid>
+            {(imgSrc) && (<img src={`data:image/png;base64,${imgSrc}`}/>)}
+            <Stack spacing={2} direction="row" sx={{ mx: 20 }}
+              divider={<Divider orientation="vertical" flexItem />}
+              justifyContent="center"
               >
-                <MenuItem value={0}>female</MenuItem>
-                <MenuItem value={1}>male</MenuItem>
-              </Select>
-            </FormControl>
-          </Box>
-          <Box sx={{ minWidth: 120, my: 2  }}>
-            <FormControl>
-              <InputLabel id="maritalStatus">MaritalStatus</InputLabel>
-              <Select
-                labelId="maritalStatus"
-                id="maritalStatus"
-                value={0}
-                label="MaritalStatus"
-              >
-                <MenuItem value={0}>Single</MenuItem>
-                <MenuItem value={1}>Married</MenuItem>
-                <MenuItem value={2}>Divorced</MenuItem>
-
-              </Select>
-            </FormControl>
-          </Box>
-        </Grid>
-
-          <Stack spacing={2} direction="row"
-            sx={{ mx: 20 }}
-            divider={<Divider orientation="vertical" flexItem />}
-            justifyContent="center"
-          >
-            <Button>
-              Reset Details
-            </Button> 
-            <Button>
-              Predict Again
-            </Button> 
-          </Stack>
+              <Button color="secondary" onClick={handleReset}
+               sx={{fontFamily: 'Karla, sans-serif'}}>
+                Reset Details
+              </Button> 
+              <Button color="secondary" onClick={handleSubmit}
+               sx={{fontFamily: 'Karla, sans-serif'}}>
+                Predict Again
+              </Button> 
+            </Stack>
+          </Grid>
+        </Box>
       </Paper>
     </Box>
   );

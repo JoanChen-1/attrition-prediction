@@ -1,16 +1,15 @@
 import * as React from 'react';
 import Grid from '@mui/material/Grid';
-// import Typography from '@mui/material/Typography';
-// import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
-
 import EnhancedTableHead from "./shared/EnhancedTableHead";
 import ColorfulChip from "./shared/ColorfulChip";
+
+
 
 const rows = [
   {
@@ -36,7 +35,7 @@ const rows = [
 ];
 
 export default function ListTable(props) {
-    const { data, handleShowDetails, selected } = props;
+    const { data, handleShowDetails, selected, predictValues, colors } = props;
     return (
       <div sx={{
         overflowX: "auto",
@@ -60,9 +59,7 @@ export default function ListTable(props) {
                     justifyContent="center"
                   >
                     <Avatar sx={{ mr: 2}}>
-                      <img src={process.env.PUBLIC_URL + '/favicon-32x32.png'} 
-                          alt="avatar-img"
-                      /> 
+                      <img src={'https://i.pravatar.cc/40?img=16'}/> 
                     </Avatar>
                     {d.user_id}
                   </Grid>
@@ -76,17 +73,25 @@ export default function ListTable(props) {
                   </TableCell>
 
                   <TableCell component="th" scope="row" align='center'>
+                    {(predictValues.length !== 0) && (
                     <ColorfulChip
-                        label="★"
-                        color="#ff0000"
-                    />
+                      label={predictValues[idx].Attrition+"%"}
+                      color={predictValues[idx].Attrition >= 70 ? colors.red: 
+                        (predictValues[idx].Attrition >= 40?colors.yellow
+                          :colors.green)}
+                    />)}
+                    {(predictValues.length === 0) && (<ColorfulChip
+                      label="？"
+                      color={colors.gray}
+                    />)}
                   </TableCell>
                   <TableCell component="th" scope="row" align='center'>
                     <Button
                       variant={(d.user_id === selected)? "contained" : "outlined"}
                       sx={{ boarderRadius: 20 }}
                       color="secondary"
-                      onClick={ () => {handleShowDetails(d)}}
+                      onClick={ () => {handleShowDetails(d, idx)}}
+                      sx={{fontFamily: 'Karla, sans-serif'}}
                     >
                       show
                     </Button>
@@ -96,28 +101,5 @@ export default function ListTable(props) {
           </TableBody>
         </Table>
       </div>
-      // <Grid item xs={12} md={12}>
-      //   <CardActionArea component="a">
-      //     <Card sx={{ display: 'flex' }} style={{backgroundColor: "#F8F8F8"}}>
-      //       <CardContent sx={{ flex: 1 }}>
-      //         <Typography 
-      //           component="h2" gutterBottom
-      //           variant={isMdUp? "h3":"h5"} 
-      //         >
-      //           {item.user_id}
-      //         </Typography>
-      //         <Typography variant={isMdUp? "h5": "body1"}  sx={{ marginLeft: "40px", marginRight: "40px" }}>
-      //           {item.description}
-      //         </Typography>
-      //       </CardContent>
-      //       <CardMedia
-      //         component="img"
-      //         sx={{ width: 160, display: { xs: 'none', sm: 'block' } }}
-      //         image="https://source.unsplash.com/random"
-      //         alt="secondary-item-img"
-      //       />
-      //     </Card>
-      //   </CardActionArea>
-      // </Grid>
     );
   }

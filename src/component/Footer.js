@@ -12,6 +12,7 @@ export default function Footer(props){
           align="center"
           color="text.secondary"
           component="p"
+          sx={{fontFamily: 'Karla, sans-serif'}}
         >
           測試版 Open Beta
         </Typography>

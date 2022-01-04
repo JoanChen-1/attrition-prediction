@@ -31,10 +31,12 @@ export default function Header(props) {
             align="center"
             color="#2d102c"
             gutterBottom
+            sx={{fontFamily: 'Karla, sans-serif'}}
           >
             {productName}
           </Typography>
-          <Typography variant="h5" align="center" color="#2d102c" paragraph>
+          <Typography variant="h5" align="center" color="#2d102c" paragraph
+            sx={{fontFamily: 'Karla, sans-serif'}}>
             {productDescription}<br/><br/><br/><br/><br/><br/><br/>
           </Typography>
         </Container>
