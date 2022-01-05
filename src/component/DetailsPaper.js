@@ -150,7 +150,7 @@ export default function DetailsPaper(props) {
   const handleSubmit = () =>{
     let newObject = Object.assign({}, data);
     for(const key in values){
-      if (key === "OverTime" || key === "EnvironmentStatisfaction" || key === "BusinessTravel"){
+      if (key === "OverTime" || key === "JobRole" || key === "BusinessTravel"){
         newObject[key] = values[key]; // don't need to convert
       }
       else{
