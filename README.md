@@ -1,5 +1,5 @@
-Here is the frontend of this project.
-1.npm install
+Here is the frontend of this project.//
+1.npm install//
 2.npm start
 
 
